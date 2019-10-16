@@ -17,4 +17,12 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    Inc16(in=pcout, out=incout);
+    // if inc=1: increment current pc value
+    Mux16(a=pcout, b=incout, sel=inc, out=muxinc);
+    // if load=1: set current pc value to input value else increment current pc value if inc=1
+    Mux16(a=muxinc, b=in, sel=load, out=muxload);
+    // if reset=1: set current pc value to 0, else set current pc value to load value if load value=1, else increment current pc value
+    Mux16(a=muxload, b=false, sel=reset, out=muxreset);
+    Register(in=muxreset, load=true, out=out, out=pcout);
 }
